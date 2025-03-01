@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpO2 Prediction Result</title>
+</head>
+<body>
+    <h1>SpO2 Prediction Result</h1>
+    <p><strong>SpO2 Value:</strong> {{ spo2 }}</p>
+    <p><strong>Predicted Category:</strong> {{ prediction }}</p>
+    <a href="/">Back to Home</a>
+</body>
+</html>

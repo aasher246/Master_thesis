@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpO2 Prediction</title>
+</head>
+<body>
+    <h1>SpO2 Prediction</h1>
+    <form method="post">
+        <label for="spo2">Enter SpO2 Value:</label>
+        <input type="text" name="spo2" required><br><br>
+        
+        <button type="submit">Submit</button>
+    </form>
+    <p>{{ message }}</p>
+</body>
+</html>

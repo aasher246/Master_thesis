@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Result</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .column {
+            width: 20%;
+            margin-bottom: 20px;
+            margin-left: 20px;
+        }
+
+        .column p {
+            margin-bottom: 20px;
+        }
+
+        .column h3 {
+            margin-bottom: 0px;
+        }
+
+        .column-score {
+            width: 30%;
+            margin-bottom: 20px;
+            margin-left: 20px;
+            align-items: center;
+	    justify-content: center;
+        }
+
+        .column-results {
+            width: 60%;
+            margin-bottom: 20px;
+            margin-left: 20px;
+        }
+
+        .column .boxed-row {
+            border: 1px solid black;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+
+        .boxed-row {
+            border: 1px solid black;
+            padding: 5px;
+            margin-bottom: 10px;
+            width: auto;
+            height: 80px;
+        }
+
+        .boxed-row h3,
+        .boxed-row p {
+            margin: 5px 0;
+        }
+
+        #ecg-column {
+            width: 55%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #ecg-plot img {
+            width: 110%;
+            height: 110%;
+        }
+
+        .color-bar {
+            width: 80%;
+            height: 20px;
+            background: linear-gradient(to right, cyan, chartreuse, yellow, red, darkred);
+            margin-top: 10px;
+            position: relative;
+        }
+
+        .arrow {
+            position: absolute;
+            top: -10px;
+            left: calc({{ arrowPosition }} * 100%);
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 8px solid black;
+        }
+
+        .white-space-heading {
+            height: 100px;
+        }
+
+	.circle {
+	    display: flex;
+	    justify-content: center;
+	    align-items: center;
+	    width: 200px;
+	    height: 200px;
+	    background-color: #f0f0f0;
+	    border: 2px solid #000;
+	    border-radius: 50%;
+	    font-size: 96px;
+	    font-weight: bold;
+	    color: #000;
+	}
+
+	/* Ensure the container uses flexbox for centering */
+	#ecg-plot .plot-container {
+	    display: flex;
+	    justify-content: right; /* Horizontally center */
+	    align-items: center; /* Vertically center */
+	    height: 100%; /* Ensure it takes up the full height of the container */
+	    width: 100%; /* Ensure it takes up the full width of the container */
+	    padding: 0px;
+	    margin: 0px;
+	}
+
+    </style>
+</head>
+<body>
+    <h1>Analysis Result</h1>
+    <div class="container">
+        <div class="column" id="ecg-column">
+            {% if plot %}
+
+            <div id="ecg-plot">
+	        <div class="plot-container">
+                    <img src="data:image/png;base64,{{ plot }}" alt="ECG Plot">
+		</div>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="column">
+            <h3>Diagnoses</h3>
+            <div class="boxed-row">
+                <p><strong>Age:</strong> {{ age }}</p>
+                <p><strong>Gender:</strong> {{ gender }}</p>
+            </div>
+            <div class="boxed-row">
+                <p><strong>ECG Diagnosis:</strong> {{ ecg_prediction }}</p>
+                <p><strong>Avg. Heart Rate:</strong> {{ heart_rate }}</p>
+            </div>
+
+            <div class="boxed-row">
+                <p><strong>Temperature:</strong> {{ temperature }}</p>
+                <p><strong>Diagnosis:</strong> {{ temperature_diagnosis }}</p>
+                <div class="color-bar">
+                    <div class="arrow"></div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="column">
+            <h3> . </h3>
+            <div class="boxed-row">
+                <p><strong>Blood Pressure:</strong> Systolic: {{ systolic }}, Diastolic: {{ diastolic }}</p>
+                <p><strong>Diagnosis:</strong> {{ bp_diagnosis }}</p>
+            </div>
+
+            <div class="boxed-row">
+                <p><strong>Respiration Rate:</strong> {{ respiration_rate }}</p>
+                <p><strong>Diagnosis:</strong> {{ rr_diagnosis }}</p>
+            </div>
+            <div class="boxed-row">
+                <p><strong>SpO2:</strong> {{ spo2 }}</p>
+                <p><strong>Diagnosis:</strong> {{ spo2_diagnosis }}</p>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="column-score">
+        <h3>Overall Health Score: </h3>
+	<div class="circle" id="health_score"> {{ health_score }} </div>
+	</div>
+        <div class="column-results">
+        <h3>Recommendations:</h3>
+        <div>
+            <p><strong>Heart Rate:</strong> {{ heart_rate_recommendation }}</p>
+            <p><strong>Blood Pressure:</strong> {{ bp_recommendation }}</p>
+            <p><strong>Temperature:</strong> {{ temperature_recommendation }}</p>
+            <p><strong>Respiratory Rate:</strong> {{ respiratory_rate_recommendation }}</p>
+            <p><strong>SpO2:</strong> {{ spo2_recommendation }}</p>
+        </div>
+
+    </div>
+
+    <a href="/">Back to Home</a>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const circle = document.getElementById('health_score');
+            const number = parseInt(circle.textContent, 10);
+        
+            let color;
+    
+            if (number < 50) {
+                color = 'DarkRed';
+            } else if (number < 60) {
+                color = 'FireBrick';
+            } else if (number < 70) {
+                color = 'DarkOrange';
+            } else if (number < 80) {
+                color = 'Gold';
+            } else if (number < 90) {
+                color = 'YellowGreen';
+            } else if (number < 100) {
+                color = 'Chartreuse';
+            }
+
+            circle.style.backgroundColor = color;
+        });
+    </script>
+</body>
+</html>

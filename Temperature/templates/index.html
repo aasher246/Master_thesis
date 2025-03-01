@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temperature Diagnosis</title>
+</head>
+<body>
+    <h1>Enter Temperature</h1>
+    <form action="/predict" method="post">
+        <label for="temperature">Temperature (°C):</label>
+        <input type="number" id="temperature" name="temperature" step="0.01" required>
+        <button type="submit">Predict</button>
+    </form>
+</body>
+</html>
